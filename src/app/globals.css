@@ -1,0 +1,366 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   GAVEA × AERA · foundation (PASS 01)
+   Tokens, type scale, grid, themes, motion rules. See docs/FOUNDATION.md.
+   ========================================================================== */
+
+:root {
+  /* Palette: mineral paper, official GAVEA ink and blue (sampled from the logo). */
+  --paper: #edeeeb;
+  --paper-2: #e1e4e2;
+  --rule: #c6cbca;
+  --stone: #8b9497; /* rules and non-text only (2.7:1) */
+  --slate: #56636a; /* secondary text (5.3:1 on paper) */
+  --ink: #081e2f; /* GAVEA navy, logo letters */
+  --night: #06121c; /* film moments */
+  --night-2: #0c1d2a;
+  --signal: #006b90; /* GAVEA blue, logo swoosh (5.1:1 on paper) */
+  --signal-on-dark: #b4e3f9; /* GAVEA light blue, Terminals (13.8:1 on night) */
+
+  /* Unit colours: only for the brand-architecture application. */
+  --unit-green: #009e4a;
+  --unit-trade: #334682;
+  --unit-terminals: #b4e3f9;
+
+  /* Theme slots (paper by default; [data-theme="film"] swaps them). */
+  --bg: var(--paper);
+  --fg: var(--ink);
+  --fg-2: var(--slate);
+  --line: var(--rule);
+  --accent: var(--signal);
+
+  /* Grid */
+  --cols: 4;
+  --margin: 20px;
+  --gutter: 16px;
+  --header-h: 52px;
+
+  /* Motion rules: one entry curve, a short and a long duration. */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-1: 0.9s;
+  --dur-2: 1.4s;
+
+  --font-sans: var(--font-sans-src), "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-mono-src), ui-monospace, Menlo, monospace;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --cols: 8;
+    --margin: 32px;
+    --gutter: 20px;
+    --header-h: 56px;
+  }
+}
+@media (min-width: 1024px) {
+  :root {
+    --cols: 12;
+    --margin: 40px;
+    --gutter: 24px;
+  }
+}
+@media (min-width: 1280px) {
+  :root {
+    --margin: clamp(48px, 4.5vw, 88px);
+  }
+}
+
+[data-theme="film"] {
+  --bg: var(--night);
+  --fg: #eef1f0;
+  --fg-2: #a9b6bc;
+  --line: rgba(238, 241, 240, 0.18);
+  --accent: var(--signal-on-dark);
+}
+[data-theme="table"] {
+  --bg: var(--paper-2);
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-ink: var(--ink);
+  --color-night: var(--night);
+  --color-signal: var(--signal);
+  --color-fg: var(--fg);
+  --color-fg-2: var(--fg-2);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+}
+
+/* Base ------------------------------------------------------------------- */
+
+html {
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: auto;
+}
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.5;
+  font-feature-settings: "ss01" 0, "kern" 1;
+  overflow-x: clip;
+}
+::selection {
+  background: var(--signal);
+  color: var(--paper);
+}
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+img,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+.skip-link {
+  position: fixed;
+  left: var(--margin);
+  top: 12px;
+  z-index: 60;
+  transform: translateY(-200%);
+  background: var(--paper);
+  color: var(--ink);
+  padding: 8px 12px;
+}
+.skip-link:focus {
+  transform: none;
+}
+
+/* Moments (scenes) ----------------------------------------------------------- */
+
+.moment {
+  position: relative;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+/* Grid -------------------------------------------------------------------------- */
+
+.grid-x {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  column-gap: var(--gutter);
+  padding-inline: var(--margin);
+}
+.pad-x {
+  padding-inline: var(--margin);
+}
+
+/* Dev/review overlay: press G. */
+.grid-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+}
+.grid-overlay > div {
+  height: 100%;
+  background: rgba(0, 107, 144, 0.07);
+  border-inline: 1px solid rgba(0, 107, 144, 0.25);
+}
+
+/* Type scale ------------------------------------------------------------------- */
+/* Sentence case everywhere; caps only in tiny mono labels (≤ 0.08em). */
+
+.t-display {
+  font-size: clamp(56px, 11vw, 200px);
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  font-weight: 500;
+  font-stretch: 100%;
+}
+.t-h1 {
+  font-size: clamp(42px, 6.4vw, 120px);
+  line-height: 0.98;
+  letter-spacing: -0.038em;
+  font-weight: 500;
+}
+.t-h2 {
+  font-size: clamp(32px, 4vw, 72px);
+  line-height: 1.03;
+  letter-spacing: -0.03em;
+  font-weight: 500;
+}
+.t-h3 {
+  font-size: clamp(22px, 2vw, 34px);
+  line-height: 1.22;
+  letter-spacing: -0.015em;
+  font-weight: 400;
+}
+.t-body {
+  font-size: clamp(16px, 1.15vw, 19px);
+  line-height: 1.52;
+  letter-spacing: -0.003em;
+}
+.t-word {
+  /* Condensed cut for ecosystem words and unit names. */
+  font-size: clamp(22px, 2.6vw, 44px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-weight: 500;
+  font-stretch: 82%;
+}
+.t-caption {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  line-height: 1.45;
+  letter-spacing: 0.01em;
+  color: var(--fg-2);
+}
+.t-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.3;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.t-folio {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+}
+.fg-2 {
+  color: var(--fg-2);
+}
+.accent {
+  color: var(--accent);
+}
+.balance {
+  text-wrap: balance;
+}
+.pretty {
+  text-wrap: pretty;
+}
+
+/* Scatter field: positions compress on narrow screens so words stay inside. */
+.scatter-field {
+  --spread: 0.68;
+}
+@media (min-width: 768px) {
+  .scatter-field {
+    --spread: 0.86;
+  }
+}
+@media (min-width: 1024px) {
+  .scatter-field {
+    --spread: 1;
+  }
+}
+
+/* Lines ------------------------------------------------------------------------- */
+
+.rule {
+  height: 1px;
+  background: var(--line);
+}
+.rule-v {
+  width: 1px;
+  background: var(--line);
+}
+
+/* Media ------------------------------------------------------------------------- */
+/* Natural daylight colour; grain lives inside the frame, never over type. */
+
+.media {
+  position: relative;
+  overflow: hidden;
+  background: var(--night-2);
+}
+.media > img,
+.media > video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.92) contrast(1.02);
+}
+.media.grain::after {
+  content: "";
+  position: absolute;
+  inset: -50%;
+  pointer-events: none;
+  opacity: 0.09;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Proof ("prova"): low-resolution real photos shown at physical size on the
+   table, with a paper margin. Never enlarged beyond 1.5×. */
+.proof {
+  background: #f6f6f3;
+  padding: 6px 6px 0;
+  box-shadow: 0 1px 0 rgba(8, 30, 47, 0.06), 0 10px 24px -18px rgba(8, 30, 47, 0.45);
+}
+.proof figcaption {
+  padding: 6px 2px 7px;
+}
+
+/* Crop marks around a frame (the director's crop). */
+.crop-marks {
+  position: relative;
+}
+.crop-marks::before,
+.crop-marks::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+  border-color: var(--fg);
+  opacity: 0.55;
+}
+.crop-marks::before {
+  top: -8px;
+  left: -8px;
+  border-top: 1px solid;
+  border-left: 1px solid;
+}
+.crop-marks::after {
+  bottom: -8px;
+  right: -8px;
+  border-bottom: 1px solid;
+  border-right: 1px solid;
+}
+
+/* AERA mark: approved raster, masked so it takes the current colour. */
+.aera-mark {
+  background-color: currentColor;
+  -webkit-mask: url("/brand/aera-mark.png") center / contain no-repeat;
+  mask: url("/brand/aera-mark.png") center / contain no-repeat;
+}
+
+/* Motion rules ------------------------------------------------------------------ */
+/* Four verbs only: crop, organise, draw, rise. Start states exist only under
+   html.motion (set before paint when motion is allowed). Without JS or with
+   reduced motion, every scene renders in its final state. */
+
+html.motion [data-crop] {
+  clip-path: inset(var(--crop-from, 12% 12% 12% 12%));
+}
+[data-crop].is-in,
+html:not(.motion) [data-crop] {
+  clip-path: inset(0 0 0 0);
+  transition: clip-path var(--dur-2) var(--ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

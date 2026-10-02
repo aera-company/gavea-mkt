@@ -1,0 +1,7 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "gavea-dev", "runtimeExecutable": "npm", "runtimeArgs": ["run", "dev", "--", "-p", "3050"], "port": 3050 },
+    { "name": "gavea-prod", "runtimeExecutable": "npm", "runtimeArgs": ["run", "start", "--", "-p", "3051"], "port": 3051 }
+  ]
+}
