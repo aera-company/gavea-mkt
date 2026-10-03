@@ -42,3 +42,7 @@ next-env.d.ts
 
 # QA captures
 /docs/qa/**/*.png
+/docs/qa/**/*.jpg
+
+# downloaded source data (Natural Earth for the archived V3.1 chart)
+/scripts/assets/data/

@@ -1,0 +1,69 @@
+{
+  "frames": {
+    "p35": {
+      "d": {
+        "dir": "/media/gate/p35/d",
+        "count": 60,
+        "w": 1600,
+        "h": 800
+      },
+      "m": {
+        "dir": "/media/gate/p35/m",
+        "count": 44,
+        "w": 960,
+        "h": 480
+      }
+    },
+    "sea": {
+      "d": {
+        "dir": "/media/gate/sea/d",
+        "count": 60,
+        "w": 1600,
+        "h": 900
+      },
+      "m": {
+        "dir": "/media/gate/sea/m",
+        "count": 44,
+        "w": 720,
+        "h": 1280
+      }
+    }
+  },
+  "stills": {
+    "deep": {
+      "w": 1600,
+      "h": 2867,
+      "waterline": 0.355
+    },
+    "costado": {
+      "w": 2400,
+      "h": 1698
+    },
+    "strip": [
+      {
+        "src": "/media/gate/strip/0",
+        "alt": "Costura do anel MERUS, em macro, com gotas de água."
+      },
+      {
+        "src": "/media/gate/strip/1",
+        "alt": "Robô de inspeção com duas luzes dentro de um túnel industrial."
+      },
+      {
+        "src": "/media/gate/strip/2",
+        "alt": "Aperto de mão no cais; ao fundo, um módulo industrial sendo içado."
+      },
+      {
+        "src": "/media/gate/strip/3",
+        "alt": "Luva de trabalho guiando o gancho de um guindaste."
+      },
+      {
+        "src": "/media/gate/strip/4",
+        "alt": "Estande de feira offshore, ainda vazio, antes da abertura."
+      }
+    ],
+    "p35": {
+      "w": 1920,
+      "h": 960
+    }
+  }
+}
