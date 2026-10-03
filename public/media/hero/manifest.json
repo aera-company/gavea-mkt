@@ -1,0 +1,30 @@
+{
+  "desktop": {
+    "count": 242,
+    "w": 1920,
+    "h": 1080
+  },
+  "mobile": {
+    "count": 121,
+    "w": 720,
+    "h": 1280,
+    "step": 2
+  },
+  "s1": [
+    0,
+    121
+  ],
+  "s2": [
+    122,
+    241
+  ],
+  "shots": [
+    "carta",
+    "defensa",
+    "baia",
+    "gancho",
+    "tunel",
+    "costado"
+  ],
+  "shotLength": 20
+}

@@ -341,6 +341,415 @@ video {
   mask: url("/brand/aera-mark.png") center / contain no-repeat;
 }
 
+/* Hero · ACT 01 · The shift (PASS R1) ---------------------------------------- */
+/* One pinned stage. Layers, back to front: film (canvas) · second reality ·
+   giant type · HUD. Start states live under html.motion only; the static
+   edition (.hero-static) is what reduced motion and no-JS get. */
+
+.hero {
+  position: relative;
+  background: var(--night);
+  color: #eef1f0;
+}
+.hero-stage {
+  position: relative;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--night);
+  color: var(--fg);
+}
+html:not(.motion) .hero-stage,
+html.motion .hero-static {
+  display: none;
+}
+
+.hero-film,
+.hero-film-inner,
+.hero-canvas,
+.hero-scrim {
+  position: absolute;
+  inset: 0;
+}
+.hero-canvas {
+  width: 100%;
+  height: 100%;
+}
+.hero-film {
+  overflow: hidden;
+  will-change: clip-path;
+}
+html.motion .hero-film {
+  clip-path: inset(50% 0% 50% 0%);
+}
+.hero-film-inner {
+  will-change: transform;
+}
+.hero-scrim {
+  pointer-events: none;
+  background:
+    linear-gradient(to top, rgba(6, 18, 28, 0.62) 0%, rgba(6, 18, 28, 0) 46%),
+    linear-gradient(to bottom, rgba(6, 18, 28, 0.38) 0%, rgba(6, 18, 28, 0) 18%);
+}
+/* Grain sits in the film, never over type. */
+.hero-film::after {
+  content: "";
+  position: absolute;
+  inset: -50%;
+  pointer-events: none;
+  opacity: 0.13;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: hero-grain 0.9s steps(6) infinite;
+}
+@keyframes hero-grain {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-4%, 3%); }
+  40% { transform: translate(3%, -5%); }
+  60% { transform: translate(-6%, -2%); }
+  80% { transform: translate(5%, 4%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* F00 mark */
+.hero-mark {
+  position: absolute;
+  left: var(--margin);
+  top: 50%;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: #eef1f0;
+}
+.hero-mark-rule {
+  display: block;
+  width: clamp(80px, 16vw, 260px);
+  height: 1px;
+  background: currentColor;
+  opacity: 0.5;
+  transform-origin: left;
+}
+
+/* Second reality: real P-35 aerial crossing in front of the pull back */
+.hero-second {
+  position: absolute;
+  left: 100%;
+  top: 13svh;
+  width: clamp(280px, 30vw, 520px);
+  margin: 0;
+  z-index: 1;
+}
+.hero-second-frame {
+  aspect-ratio: 2.39;
+  overflow: hidden;
+  background: var(--night-2);
+}
+.hero-second-media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.hero-second figcaption {
+  margin-top: 8px;
+  color: rgba(238, 241, 240, 0.72);
+}
+
+/* Giant type */
+.hero-type {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  margin: 0;
+  pointer-events: none;
+  font-weight: inherit;
+}
+.hero-line {
+  position: absolute;
+  left: var(--margin);
+  right: var(--margin);
+  bottom: 9svh;
+  display: block;
+  font-size: clamp(64px, 15.2vw, 300px);
+  line-height: 0.84;
+  font-weight: 620;
+  font-stretch: 84%;
+  letter-spacing: -0.03em;
+  color: #f2f4f3;
+  transform-origin: left bottom;
+}
+.hero-line-b {
+  text-align: right;
+  transform-origin: right bottom;
+}
+.hero-mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.07em;
+  margin-bottom: -0.07em;
+}
+.hero-mask > span {
+  display: inline-block;
+}
+html.motion .hero-stage .hero-mask > span {
+  transform: translateY(108%);
+}
+
+/* F03 montage HUD */
+.hero-shots {
+  position: absolute;
+  z-index: 3;
+  left: var(--margin);
+  right: var(--margin);
+  bottom: 64px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  color: #eef1f0;
+}
+.hero-shot-ticks {
+  display: flex;
+  gap: 4px;
+}
+.hero-shot-tick {
+  width: 28px;
+  height: 1px;
+  background: rgba(238, 241, 240, 0.3);
+}
+.hero-shot-tick.is-on {
+  background: var(--signal-on-dark);
+}
+
+/* F04 peak words */
+.hero-words {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.hero-word {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.hero-word-bg {
+  position: absolute;
+  inset: -6%;
+  background: var(--img) center / cover no-repeat;
+  opacity: 0.46;
+  filter: saturate(0.8);
+}
+.hero-word-text {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+  font-size: var(--fs, 18vw);
+  line-height: 0.84;
+  padding-bottom: 0.08em;
+  font-weight: 760;
+  letter-spacing: -0.035em;
+  font-variation-settings: "wdth" var(--w, 125);
+  /* Light letters with the plane's image as texture: a paper veil over the
+     image, both clipped to the glyphs. */
+  color: transparent;
+  background:
+    linear-gradient(rgba(242, 244, 243, 0.7), rgba(242, 244, 243, 0.7)),
+    var(--img) 0% 50% / 160% auto no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.hero-word-index {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  bottom: 64px;
+  transform: translateX(-50%);
+  color: rgba(238, 241, 240, 0.72);
+}
+
+/* F05 / F06 paper and reveal */
+.hero-paper {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(20px, 3vw, 44px);
+  padding-inline: var(--margin);
+  background: var(--paper);
+  color: var(--ink);
+}
+.hero-pair {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+}
+.hero-pair-mark {
+  display: inline-block;
+  width: 84px;
+  height: 14px;
+}
+.hero-close {
+  margin: 0;
+  font-size: clamp(56px, 11.4vw, 230px);
+  line-height: 0.88;
+  font-weight: 600;
+  font-stretch: 92%;
+  letter-spacing: -0.045em;
+}
+.hero-close-rule {
+  display: block;
+  height: 1px;
+  background: var(--signal);
+  transform-origin: left;
+}
+html.motion .hero-shots,
+html.motion .hero-word,
+html.motion .hero-word-index,
+html.motion .hero-paper,
+html.motion .hero-pair {
+  visibility: hidden;
+  opacity: 0;
+}
+
+/* HUD: frame number, chapter, act */
+.hero-hud {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  color: rgba(238, 241, 240, 0.86);
+  transition: color 0.4s var(--ease-out);
+}
+.hero[data-chapter="F05"] .hero-hud,
+.hero[data-chapter="F06"] .hero-hud {
+  color: var(--ink);
+}
+.hero-hud > * {
+  position: absolute;
+}
+.hero-hud-brand,
+.hero-hud-act {
+  top: 22px;
+}
+.hero-hud-brand {
+  left: var(--margin);
+}
+.hero-hud-act {
+  right: var(--margin);
+}
+.hero-hud-chapter,
+.hero-hud-frame {
+  bottom: 22px;
+}
+.hero-hud-chapter {
+  left: var(--margin);
+}
+.hero-hud-frame {
+  right: var(--margin);
+  font-variant-numeric: tabular-nums;
+}
+.hero-cue {
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+}
+
+/* Static edition (reduced motion, no JS): five frames in sequence */
+.hero-static .hero-panel {
+  position: relative;
+  isolation: isolate;
+  min-height: 100svh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 20px;
+  padding: var(--margin);
+  padding-bottom: 10svh;
+  overflow: hidden;
+  background: var(--night);
+  color: #f2f4f3;
+}
+.hero-static .hero-panel > img {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.hero-static .hero-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(to top, rgba(6, 18, 28, 0.62), rgba(6, 18, 28, 0) 50%);
+}
+.hero-static .hero-line {
+  position: static;
+  margin: 0;
+}
+.hero-panel-words {
+  list-style: none;
+  justify-content: center !important;
+  align-items: center;
+  gap: 2svh !important;
+}
+.hero-panel-words .hero-word-text {
+  font-size: clamp(48px, 14vw, 220px);
+}
+.hero-static .hero-panel-paper {
+  justify-content: center;
+  background: var(--paper);
+  color: var(--ink);
+}
+.hero-static .hero-panel-paper::before {
+  display: none;
+}
+
+/* After the hero: R1 ends here */
+.hero-after {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 28px var(--margin) 32px;
+  border-top: 1px solid var(--rule);
+  background: var(--paper);
+  color: var(--slate);
+}
+
+@media (max-aspect-ratio: 4/5), (max-width: 767px) {
+  .hero-line {
+    font-size: 16.5vw;
+    line-height: 0.9;
+    font-stretch: 80%;
+    bottom: 14svh;
+  }
+  .hero-second,
+  .hero-hud-act {
+    display: none;
+  }
+  .hero-shots {
+    bottom: 56px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .hero-shot-tick {
+    width: 16px;
+  }
+  .hero-word-index {
+    bottom: 56px;
+  }
+  .hero-close {
+    font-size: 17vw;
+  }
+}
+
 /* Motion rules ------------------------------------------------------------------ */
 /* Four verbs only: crop, organise, draw, rise. Start states exist only under
    html.motion (set before paint when motion is allowed). Without JS or with
