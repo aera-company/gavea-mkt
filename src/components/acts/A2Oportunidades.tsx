@@ -30,7 +30,7 @@ export function A2Oportunidades() {
       const el = root.current;
       const q = gsap.utils.selector(el);
       const io = "power2.inOut";
-      const tl = pinned(el, q(".a2o-stage")[0] as HTMLElement, portrait ? "+=300%" : "+=340%");
+      const tl = pinned(el, q(".a2o-stage")[0] as HTMLElement, portrait ? 300 : 340);
 
       rise(tl, ".a2o-title", 0.0, 0.05);
 

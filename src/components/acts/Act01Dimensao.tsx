@@ -73,7 +73,7 @@ export function Act01Dimensao() {
       const tStar = gsap.utils.clamp(0, 1, (waterline * deepH() - vh0 * 0.42) / (deepH() - vh0));
       const pTitle = 0.52 + 0.24 * tStar;
 
-      const tl = pinned(el, one(".a1-stage"), portrait ? "+=430%" : "+=560%");
+      const tl = pinned(el, one(".a1-stage"), portrait ? 430 : 560);
       const io = "power2.inOut";
 
       // 01.0 · silence: GAVEA, a hairline

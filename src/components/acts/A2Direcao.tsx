@@ -33,7 +33,7 @@ export function A2Direcao() {
         return ((r ? r.left : 20) / window.innerWidth) * 100;
       };
 
-      const tl = pinned(el, q(".a2d-stage")[0] as HTMLElement, portrait ? "+=170%" : "+=190%");
+      const tl = pinned(el, q(".a2d-stage")[0] as HTMLElement, portrait ? 170 : 190);
       q(".a2d-band").forEach((b, k) => {
         tl.fromTo(b, { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.16, ease: io }, 0.04 + k * 0.06)
           .fromTo(b.querySelector("img"), { scale: 1.15 }, { scale: 1, duration: 0.3, ease: "power2.out" }, 0.04 + k * 0.06);

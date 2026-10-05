@@ -30,16 +30,22 @@ export function sink(tl: gsap.core.Timeline, sel: Target, at: number, d = 0.03) 
   return tl.to(inner(sel), { yPercent: -150, duration: d, ease: "power2.in" }, at);
 }
 
+/**
+ * Pace of the whole experience: scroll distance per scene is its base length
+ * (in % of the viewport) times PACE. Raise it to slow everything down.
+ */
+export const PACE = 1.6;
+
 /** One scroll-scrubbed timeline per pinned scene; its length is the pin. */
-export function pinned(trigger: HTMLElement, stage: HTMLElement, end: string) {
+export function pinned(trigger: HTMLElement, stage: HTMLElement, length: number) {
   return gsap.timeline({
     defaults: { ease: "none" },
     scrollTrigger: {
       trigger,
       start: "top top",
-      end,
+      end: `+=${Math.round(length * PACE)}%`,
       pin: stage,
-      scrub: 0.7,
+      scrub: 1.2,
       anticipatePin: 1,
       invalidateOnRefresh: true,
     },

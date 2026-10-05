@@ -23,7 +23,7 @@ export function Presenter() {
       const dist = Math.abs(target - y) / window.innerHeight;
       busy = gsap.to(pos, {
         y: target,
-        duration: Math.min(2.2, 0.9 + dist * 0.35),
+        duration: Math.min(2.6, 1.1 + dist * 0.3),
         ease: "power2.inOut",
         onUpdate: () => window.scrollTo(0, pos.y),
       });

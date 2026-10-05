@@ -37,7 +37,7 @@ export function A2Inteligencia() {
         return ((r ? r.left : 20) / window.innerWidth) * 100;
       };
 
-      const tl = pinned(el, q(".a2i-stage")[0] as HTMLElement, portrait ? "+=300%" : "+=340%");
+      const tl = pinned(el, q(".a2i-stage")[0] as HTMLElement, portrait ? 300 : 340);
 
       // the real vessel, then the drawing comes down over it
       rise(tl, ".a2i-title", 0.02, 0.05);

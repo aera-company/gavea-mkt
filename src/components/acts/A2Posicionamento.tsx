@@ -35,7 +35,7 @@ export function A2Posicionamento() {
       const origin = portrait ? "50% -30%" : "10% -23%";
       const inset = crop.map((v) => `${v}%`).join(" ");
 
-      const tl = pinned(el, q(".a2p-stage")[0] as HTMLElement, portrait ? "+=230%" : "+=270%");
+      const tl = pinned(el, q(".a2p-stage")[0] as HTMLElement, portrait ? 230 : 270);
       const io = "power2.inOut";
 
       rise(tl, ".a2p-title", 0.02, 0.06);

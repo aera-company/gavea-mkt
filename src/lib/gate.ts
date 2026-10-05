@@ -93,5 +93,75 @@ export const direcao = {
     { src: `${M}/strip/2-d.webp`, pos: "50% 50%" },
     { src: `${M}/p35-drawing.webp`, pos: "52% 40%" },
   ],
-  next: "A seguir · Ato 03 em construção",
+} as const;
+
+/* ── Acts 03 to 05 (after the gate) · roteiro aprovado pelo Tiago em 05/10 ── */
+
+const N = "/media/next";
+
+export const aera = {
+  mark: "AERA × GAVEA",
+  title: "Direção para o próximo movimento.",
+  sub: "Marca, marketing, comercial e inteligência na mesma direção.",
+  nodes: ["Agência", "Time interno", "Comercial", "Parceiros", "Marcas representadas", "Fornecedores"],
+  doing: ["Quem já faz continua fazendo.", "A AERA conduz."],
+  model: "A responsabilidade é central. O modelo é flexível.",
+  team: {
+    title: ["Direção humana.", "Produção com inteligência."],
+    agents: ["Planejamento", "Sondagem", "Conceito", "Roteiro", "Arte", "Storyboard", "Operação", "Edição", "Mídia", "Transformação"],
+    note: "Esta apresentação foi produzida assim.",
+  },
+} as const;
+
+export const trade = {
+  label: "Gavea Trade",
+  title: "De informação a inteligência aplicada.",
+  steps: [
+    { n: "01", t: "Pedido", s: "e-mail, WhatsApp, planilha" },
+    { n: "02", t: "Checklist", s: "especificação, frete, prazo" },
+    { n: "03", t: "Cotações", s: "lado a lado" },
+    { n: "04", t: "Proposta", s: "versão validada" },
+    { n: "05", t: "Decisão", s: "" },
+  ],
+  close: "Do pedido picotado à proposta validada.",
+} as const;
+
+export const marca = {
+  label: "Marca",
+  logo: "/brand/gavea-white.webp",
+  signature: "Beyond the surface.",
+  close: "A mesma GAVEA. Vista inteira.",
+  applications: [
+    { src: `${M}/costado-d.webp`, pos: "50% 8%", alt: "Costado de navio com dois tripulantes no convés." },
+    { src: `${M}/deep-d.webp`, pos: "50% 34%", alt: "Casco cortado pela linha d'água." },
+  ],
+} as const;
+
+export const marketing = {
+  label: "Marketing",
+  kv: { src: `${N}/merus-seam.webp`, m: `${N}/merus-seam-m.webp`, alt: "Costura do anel MERUS, em macro, com gotas de água." },
+  headline: ["Tubulação limpa.", "Operação contínua."],
+  post: { src: `${N}/merus-portrait.webp`, line: "O fluxo não para.", alt: "Anel MERUS em estúdio." },
+  deck: { label: "Apresentação comercial", title: ["MERUS Ring", "para a operação offshore"] },
+  cta: "Solicitar avaliação técnica",
+  close: "Marketing que começa no negócio e termina na venda.",
+} as const;
+
+export const futuro = {
+  label: "Futuro",
+  units: [
+    { src: "/brand/unit-log.webp", alt: "Gavea Logística" },
+    { src: "/brand/unit-terminals.webp", alt: "Gavea Terminals" },
+    { src: "/brand/unit-green.webp", alt: "Gavea Green" },
+    { src: "/brand/unit-trade.webp", alt: "Gavea Trade" },
+  ],
+  title: "Quatro frentes. Uma marca.",
+  sub: "Logística, terminais, tecnologia e comércio, crescendo na mesma direção.",
+} as const;
+
+export const fechamento = {
+  mark: "AERA × GAVEA",
+  title: "A próxima dimensão.",
+  sub: "Direção para transformar o movimento da GAVEA em percepção, oportunidade e inteligência.",
+  question: "Vamos construir esse próximo movimento?",
 } as const;
