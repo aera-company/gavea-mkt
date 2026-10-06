@@ -4,19 +4,23 @@ import { useRef } from "react";
 import { gsap, ScrollTrigger } from "@/components/motion/gsap";
 import { useGsapContext } from "@/components/motion/useGsapContext";
 import { registerRests } from "@/components/motion/presenter";
+import { FrameSequence } from "@/components/film/frameSequence";
 import { act01 } from "@/lib/gate";
-import { motionReady, pinned, rise } from "./scene";
+import { motionReady, pinned, rise, sink } from "./scene";
 
 /**
- * Act 01 · Uma nova dimensão. The hero is a film (GW-T1, scope 2.39:1, 19 s):
- * the macro of the P-35 hull pulls back to the whole vessel ("Novos projetos."),
- * the quay crew at the fender ("Novas responsabilidades."), the dive along the
- * hull into the dark ("Uma nova dimensão"). It plays on its own on load, muted;
- * the titles are HTML timed on the film. Scroll then takes over: the film goes
- * dark, the hairline opens a clean field, "pede uma nova direção." completes the
+ * Act 01 · Uma nova dimensão. The hero is a film (GW-T1, scope 2.39:1) driven by
+ * the scroll, frame by frame: the macro of the P-35 hull pulls back to the whole
+ * vessel ("Novos projetos."), the quay crew at the fender ("Novas
+ * responsabilidades."), the dive along the hull into the dark ("Uma nova
+ * dimensão"). Guided steps, Emons-like: the presenter rests stop on each idea.
+ * Then the hairline opens a clean field, "pede uma nova direção." completes the
  * line and "direção" leaves alone to become the direction rail of Act 02.
- * Without motion, .a1-static tells the same story in four frames.
+ * Positions are progress p of the pin. Without motion, .a1-static tells the
+ * same story in four frames.
  */
+const FILM_END = 0.58; // share of the pin the film takes
+
 export function Act01Dimensao() {
   const root = useRef<HTMLElement>(null);
 
@@ -38,54 +42,36 @@ export function Act01Dimensao() {
       const railLabel = document.querySelector<HTMLElement>(".rail-label");
       const { film } = act01;
 
-      // ── the film plays on its own; titles follow its clock ───────────────
-      const video = one<HTMLVideoElement>(".a1-film video");
-      video.src = portrait || small ? film.m : film.d;
-      const span = (s: string) => one(`${s} > span`);
-      const shown = new Map<string, boolean>();
-      // start states in percent only (GSAP would otherwise read the CSS 150% as pixels)
-      gsap.set([".a1-t1", ".a1-t2", ".a1-l1"].map(span), { y: 0, yPercent: 150 });
-      const show = (s: string, on: boolean) => {
-        if (shown.get(s) === on) return;
-        shown.set(s, on);
-        gsap.to(span(s), on
-          ? { y: 0, yPercent: 0, duration: 0.9, ease: "power3.out", overwrite: true }
-          : { y: 0, yPercent: -150, duration: 0.5, ease: "power2.in", overwrite: true, onComplete: () => { gsap.set(span(s), { yPercent: 150 }); } });
-      };
-      let p = 0;                       // pin progress
-      let parked = false;              // paused by the scroll, not by its end
-      const sync = () => {
-        const t = video.currentTime;
-        const inFilm = p < 0.34;
-        show(".a1-t1", inFilm && t >= film.cues.t1[0] && t < film.cues.t1[1]);
-        show(".a1-t2", inFilm && t >= film.cues.t2[0] && t < film.cues.t2[1]);
-        show(".a1-l1", t >= film.cues.l1 || !inFilm);
-        gsap.to(".a1-cue", { autoAlpha: video.ended && inFilm ? 1 : 0, duration: 0.6, overwrite: true });
-      };
-      let raf = 0;
-      const loop = () => { sync(); raf = requestAnimationFrame(loop); };
-      raf = requestAnimationFrame(loop);
-      const play = () => video.play().catch(() => {
-        // autoplay refused: start on the first gesture
-        const go = () => { video.play().catch(() => {}); ["pointerdown", "keydown", "touchstart", "wheel"].forEach((e) => removeEventListener(e, go)); };
-        ["pointerdown", "keydown", "touchstart", "wheel"].forEach((e) => addEventListener(e, go, { once: true, passive: true }));
-      });
-      play();
+      // ── the film, frame by frame with the scroll ───────────────────────────
+      const spec = portrait || small ? film.frames.m : film.frames.d;
+      const seq = new FrameSequence(one<HTMLCanvasElement>(".a1-film canvas"), spec);
+      seq.load();
+      const last = spec.count - 1;
+      const at = (frame: number) => (frame / last) * FILM_END; // film frame -> pin progress
+      const f = { frame: 0 };
+      const draw = () => seq.seek(f.frame);
 
-      // ── scroll: the film goes dark, the line is completed, the word leaves ──
-      const tl = pinned(el, one(".a1-stage"), portrait ? 280 : 300);
+      const tl = pinned(el, one(".a1-stage"), portrait ? 520 : 560);
       const io = "power2.inOut";
 
-      tl.to(".a1-film", { autoAlpha: 0, duration: 0.08, ease: "power1.in" }, 0.32)
-        .fromTo(".a1-dark", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.06 }, 0.32);
+      tl.fromTo(".a1-cue", { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.02 }, 0.01)
+        .to(f, { frame: last, duration: FILM_END, ease: "none", onUpdate: draw }, 0);
 
-      // the hairline returns and opens a clean field; the line is completed
-      tl.fromTo(".a1-rule", { autoAlpha: 1, scaleX: 0 }, { scaleX: 1, duration: 0.043 }, 0.56)
-        .fromTo(".a1-paper", { clipPath: "inset(50% 0% 50% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.086, ease: io }, 0.597)
-        .to(".a1-rule", { autoAlpha: 0, duration: 0.02 }, 0.635)
-        .fromTo(".a1-head", { color: "#f2f4f3" }, { color: "#081e2f", duration: 0.064 }, 0.597)
-        .to(".a1-dot", { autoAlpha: 0, duration: 0.026 }, 0.693);
-      rise(tl, ".a1-l2", 0.715, 0.096);
+      // titles on the film
+      rise(tl, ".a1-t1", at(film.cues.t1[0]), 0.03);
+      sink(tl, ".a1-t1", at(film.cues.t1[1]) - 0.02, 0.02);
+      rise(tl, ".a1-t2", at(film.cues.t2[0]), 0.03);
+      sink(tl, ".a1-t2", at(film.cues.t2[1]) - 0.02, 0.02);
+      rise(tl, ".a1-l1", at(film.cues.l1), 0.04);
+
+      // the film has gone dark; the hairline returns and opens a clean field
+      tl.fromTo(".a1-dark", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.03 }, FILM_END)
+        .fromTo(".a1-rule", { autoAlpha: 1, scaleX: 0 }, { scaleX: 1, duration: 0.03, immediateRender: false }, 0.64)
+        .fromTo(".a1-paper", { clipPath: "inset(50% 0% 50% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.06, ease: io }, 0.66)
+        .to(".a1-rule", { autoAlpha: 0, duration: 0.015 }, 0.69)
+        .fromTo(".a1-head", { color: "#f2f4f3" }, { color: "#081e2f", duration: 0.045 }, 0.66)
+        .to(".a1-dot", { autoAlpha: 0, duration: 0.02 }, 0.73);
+      rise(tl, ".a1-l2", 0.745, 0.07);
 
       // bridge · everything but "direção" goes; the word becomes the rail
       const word = one(".a1-word");
@@ -99,34 +85,30 @@ export function Act01Dimensao() {
         const y0 = h.top + word.offsetTop;
         return { x: (label?.left ?? 24) - x0, y: (label?.top ?? 24) - y0 - fs * 0.08, scale: lfs / fs };
       };
-      tl.set(".a1-l2", { overflow: "visible" }, 0.9)
-        .to([".a1-l1", ".a1-l2a", ".a1-l2b"], { autoAlpha: 0, duration: 0.043 }, 0.89)
-        .to(word, { x: () => fly().x, y: () => fly().y, scale: () => fly().scale, transformOrigin: "0 0", duration: 0.075, ease: io }, 0.908);
+      tl.set(".a1-l2", { overflow: "visible" }, 0.905)
+        .to([".a1-l1", ".a1-l2a", ".a1-l2b"], { autoAlpha: 0, duration: 0.03 }, 0.895)
+        .to(word, { x: () => fly().x, y: () => fly().y, scale: () => fly().scale, transformOrigin: "0 0", duration: 0.06, ease: io }, 0.91);
       if (railLabel && railLine) {
-        tl.fromTo(railLabel, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.013 }, 0.979)
-          .to(word, { autoAlpha: 0, duration: 0.013 }, 0.979)
-          .fromTo(railLine, { autoAlpha: 1, scaleY: 0 }, { scaleY: 1, duration: 0.043, transformOrigin: "50% 0%" }, 0.957);
+        tl.fromTo(railLabel, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.01 }, 0.98)
+          .to(word, { autoAlpha: 0, duration: 0.01 }, 0.98)
+          .fromTo(railLine, { autoAlpha: 1, scaleY: 0 }, { scaleY: 1, duration: 0.03, transformOrigin: "50% 0%" }, 0.96);
       }
       tl.set({}, {}, 1);
 
-      // the film and the scroll: leaving pauses it, coming back to the top replays it
-      const st = tl.scrollTrigger!;
-      const onScroll = () => {
-        p = st.progress;
-        if (p > 0.36 && !video.paused) { video.pause(); parked = true; }
-        else if (p <= 0.3 && parked) { parked = false; play(); }
-        if (p < 0.02 && video.ended) { video.currentTime = 0; play(); }
-      };
-      tl.eventCallback("onUpdate", onScroll);
-      ScrollTrigger.addEventListener("scrollEnd", onScroll);
-
-      const off = registerRests("a1", st, [0, 0.46, 0.84]);
+      // guided steps: the macro, the P-35, the quay, the deep, the line
+      const mid = (a: number, b: number) => (at(a) + at(b)) / 2;
+      const off = registerRests("a1", tl.scrollTrigger!, [
+        0,
+        mid(film.cues.t1[0] + 14, film.cues.t1[1]),
+        mid(film.cues.t2[0] + 10, film.cues.t2[1]),
+        at(film.cues.l1 + 26),
+        0.84,
+      ]);
       document.fonts?.ready.then(() => ScrollTrigger.refresh());
+      draw();
       return () => {
         off();
-        cancelAnimationFrame(raf);
-        ScrollTrigger.removeEventListener("scrollEnd", onScroll);
-        video.pause();
+        seq.destroy();
       };
     },
   );
@@ -137,8 +119,8 @@ export function Act01Dimensao() {
     <section ref={root} className="a1" aria-label="Uma nova dimensão">
       {/* ── Motion edition ─────────────────────────────────────────────── */}
       <div className="a1-stage">
-        <div className="a1-film">
-          <video muted playsInline preload="auto" poster={film.poster} aria-label={alts.film} />
+        <div className="a1-film" role="img" aria-label={alts.film}>
+          <canvas aria-hidden="true" style={{ backgroundImage: `url(${film.poster})` }} />
         </div>
         <div className="a1-dark" />
         <div className="a1-paper" />

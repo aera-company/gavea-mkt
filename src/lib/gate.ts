@@ -17,14 +17,13 @@ export const act01 = {
   /**
    * The hero film (GW-T1 v4, scope 2.39:1, 19.1 s, no titles burned in): macro of the
    * hull pulling back to the P-35, the quay crew, the dive along the hull into the dark.
-   * Written by scripts/assets/build-hero.sh. Titles are HTML, timed on the film (seconds).
+   * Scroll-driven frame sequence (every other frame of the 24 fps master from frame 10 = 225 frames),
+   * written by scripts/assets/build-hero.sh. Titles are HTML, cued on film frames.
    */
   film: {
-    d: "/media/hero/hero-d.mp4",
-    m: "/media/hero/hero-m.mp4",
+    frames: { d: { dir: "/media/hero/d", count: 225, step: 1 }, m: { dir: "/media/hero/m", count: 225, step: 1 } },
     poster: "/media/hero/poster.webp",
-    ratio: 1920 / 804,
-    cues: { t1: [5.6, 8.5], t2: [10.0, 12.4], l1: 15.0 },
+    cues: { t1: [62, 97], t2: [115, 144], l1: 175 },
     stills: {
       p35: "/media/hero/still-p35.webp",
       cais: "/media/hero/still-cais.webp",
