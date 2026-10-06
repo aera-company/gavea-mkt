@@ -423,67 +423,39 @@ html:not(.motion) .a1-stage,
 html.motion .a1-static {
   display: none;
 }
-.a1-p35,
-.a1-sea,
-.a1-deep,
+.a1-film,
 .a1-dark,
 .a1-paper {
   position: absolute;
   inset: 0;
 }
-.a1-p35 canvas,
-.a1-sea canvas {
+/* the hero film: scope 2.39:1, letterboxed on black, never cropped */
+.a1-film {
+  z-index: 1;
+  --bar: max(0px, calc((100svh - 100vw / 2.39) / 2));
+}
+.a1-film video {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
+  object-fit: contain;
+  background: #05080b;
 }
-.a1-p35 {
-  z-index: 1;
-  overflow: hidden;
-  clip-path: inset(50% 0% 50% 0%);
-}
-.a1-sea {
-  z-index: 2;
-  overflow: hidden;
-  clip-path: polygon(118% 0%, 100% 0%, 100% 100%, 100% 100%);
-}
-.a1-scrim {
+/* film titles sit in the lower bar, like a subtitle in a cinema */
+.a1-ft {
   position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(5, 8, 11, 0.5) 0%, rgba(5, 8, 11, 0) 45%);
-}
-.a1-p35::after,
-.a1-sea::after,
-.a1-deep::after {
-  content: "";
-  position: absolute;
-  inset: -50%;
-  pointer-events: none;
-  opacity: 0.1;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation: gate-grain 0.9s steps(6) infinite;
-}
-@keyframes gate-grain {
-  0% { transform: translate(0, 0); }
-  20% { transform: translate(-4%, 3%); }
-  40% { transform: translate(3%, -5%); }
-  60% { transform: translate(-6%, -2%); }
-  80% { transform: translate(5%, 4%); }
-  100% { transform: translate(0, 0); }
-}
-.a1-deep {
-  z-index: 3;
-  overflow: hidden;
-}
-.a1-deep img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  max-width: none;
-  transform: translateY(100svh);
+  z-index: 7;
+  left: var(--margin);
+  right: var(--margin);
+  bottom: max(18px, calc((100svh - 100vw / 2.39) / 4 - 0.55em));
+  margin: 0;
+  font-size: clamp(24px, 2.9vw, 54px);
+  line-height: 1.05;
+  font-weight: 600;
+  font-stretch: 88%;
+  letter-spacing: -0.03em;
+  color: #f2f4f3;
 }
 .a1-dark {
   z-index: 4;
@@ -506,36 +478,15 @@ html.motion .a1-static {
   background: rgba(238, 241, 240, 0.72);
   transform: scaleX(0);
 }
-.a1-mark {
-  position: absolute;
-  z-index: 7;
-  left: 50%;
-  top: 50%;
-  margin: 0;
-  transform: translate(-50%, calc(-100% - 20px));
-  color: rgba(238, 241, 240, 0.88);
-  letter-spacing: 0.32em;
-}
 .a1-cue {
   position: absolute;
   z-index: 7;
+  opacity: 0;
+  visibility: hidden;
   left: 50%;
   bottom: 22px;
   transform: translateX(-50%);
   color: rgba(238, 241, 240, 0.5);
-}
-.a1-t {
-  position: absolute;
-  z-index: 7;
-  left: var(--margin);
-  right: var(--margin);
-  bottom: 8svh;
-  margin: 0;
-  font-size: clamp(52px, 8.6vw, 176px);
-  line-height: 0.9;
-  font-weight: 600;
-  font-stretch: 88%;
-  letter-spacing: -0.04em;
 }
 .a1-head {
   position: absolute;
@@ -1611,15 +1562,10 @@ html.motion .a5c-dot { opacity: 0; visibility: hidden; }
 
 /* portrait and phones: their own edit */
 @media (max-aspect-ratio: 4/5), (max-width: 767px) {
-  .a1-p35 {
-    inset: auto 0;
-    top: calc(50% - 31vw);
-    height: 62vw;
-  }
-  .a1-t {
-    font-size: 12.6vw;
+  .a1-ft {
+    font-size: 7vw;
     font-stretch: 82%;
-    bottom: 12svh;
+    bottom: calc(50% - 21vw - 2.2em);
   }
   .a1-head {
     font-size: 12.4vw;

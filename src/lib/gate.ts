@@ -14,20 +14,28 @@ export const act01 = {
   t2: "Novas responsabilidades.",
   /** the closing line is built from these pieces so "direção" can leave on its own */
   head: { l1: "Uma nova dimensão", l2a: "pede uma nova ", word: "direção", l2b: "." },
-  frames: {
-    p35: { d: { dir: `${M}/p35/d`, count: 60, step: 1 }, m: { dir: `${M}/p35/m`, count: 44, step: 1 } },
-    sea: { d: { dir: `${M}/sea/d`, count: 60, step: 1 }, m: { dir: `${M}/sea/m`, count: 44, step: 1 } },
-  },
-  deep: {
-    d: `${M}/deep-d.webp`,
-    m: `${M}/deep-m.webp`,
-    ratio: 5504 / 3072, // height / width
-    waterline: 0.36, // waterline height as a share of the image
-    alt: "Casco de uma grande unidade offshore cortado pela linha d'água: acima, o céu; abaixo, o casco continua até o azul profundo, com um robô submarino pequeno junto ao aço.",
+  /**
+   * The hero film (GW-T1 v4, scope 2.39:1, 19.1 s, no titles burned in): macro of the
+   * hull pulling back to the P-35, the quay crew, the dive along the hull into the dark.
+   * Written by scripts/assets/build-hero.sh. Titles are HTML, timed on the film (seconds).
+   */
+  film: {
+    d: "/media/hero/hero-d.mp4",
+    m: "/media/hero/hero-m.mp4",
+    poster: "/media/hero/poster.webp",
+    ratio: 1920 / 804,
+    cues: { t1: [5.6, 8.5], t2: [10.0, 12.4], l1: 15.0 },
+    stills: {
+      p35: "/media/hero/still-p35.webp",
+      cais: "/media/hero/still-cais.webp",
+      deep: "/media/hero/still-deep.webp",
+    },
   },
   alts: {
-    p35: "A P-35, unidade de produção da Petrobras, vista do alto em mar aberto, com dois rebocadores.",
-    sea: "Embarcação de apoio offshore furando mar pesado ao entardecer.",
+    film: "Do aço do casco ao navio inteiro: a P-35 na baía. Depois, a equipe na defensa de um cais e a câmera descendo pelo casco abaixo da linha d'água até o escuro.",
+    p35: "A P-35 de través na Baía de Guanabara, com o Pão de Açúcar ao fundo.",
+    cais: "Equipe de colete laranja junto à defensa, ao lado de um casco enorme e enferrujado.",
+    deep: "O casco continua abaixo da linha d'água, no azul que escurece.",
   },
 } as const;
 
